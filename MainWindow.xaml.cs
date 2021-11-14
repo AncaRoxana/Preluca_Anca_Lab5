@@ -1,5 +1,7 @@
-﻿using System;
+﻿using AutoLotModel;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,25 +17,45 @@ using System.Windows.Shapes;
 
 namespace Preluca_Anca_Lab5
 {
+    enum ActionState
+    {
+        New,
+        Edit,
+        Delete,
+        Nothing
+    }
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        ActionState action = ActionState.Nothing;
+        AutoLotEntitiesModel ctx = new AutoLotEntitiesModel();
+        CollectionViewSource customerViewSource;
+        CollectionViewSource inventoryViewSource;
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = this;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
 
-            System.Windows.Data.CollectionViewSource customerViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("customerViewSource")));
-            // Load data by setting the CollectionViewSource.Source property:
-            // customerViewSource.Source = [generic data source]
-            System.Windows.Data.CollectionViewSource inventoryViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("inventoryViewSource")));
-            // Load data by setting the CollectionViewSource.Source property:
-            // inventoryViewSource.Source = [generic data source]
+           
+
+            customerViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("customerViewSource")));
+            customerViewSource.Source = ctx.Customers.Local;
+            ctx.Customers.Load();
+
+            inventoryViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("inventoryViewSource")));
+            inventoryViewSource.Source = ctx.Inventories.Local;
+            ctx.Inventories.Load();
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
