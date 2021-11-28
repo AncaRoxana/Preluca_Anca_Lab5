@@ -16,7 +16,6 @@ namespace AutoLotModel
         }
 
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int CarId { get; set; }
 
         [StringLength(50)]
